@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using ParallaxApp.Data.Security;
 
 namespace ParallaxApp
 {
@@ -28,6 +30,8 @@ namespace ParallaxApp
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            services.AddDbContext<ParallaxIdentityDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("ParallaxDbContext")));
             services.AddMvc();
         }
 
@@ -48,6 +52,7 @@ namespace ParallaxApp
             }
 
             app.UseStaticFiles();
+            app.UseIdentity();
 
             app.UseMvc(routes =>
             {
